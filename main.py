@@ -31,20 +31,72 @@ class Task(UserControl):
     def build(self):
         self.display_tasks = Checkbox(
             value=False, label=self.task_name,
+            on_change=self.satatus_changed
         
         )
-        self.edit_name = TextField(expand=1)
+        self.edit_name = TextField(expand=1)#editar tarefa
         self.display_view = Row(
             alignment="spaceBetween",
             vertical_alignment="center",
             controls=[
                 self.display_tasks,
                 Row(
+                    spacing=0,
+                    controls=[
+                        IconButton(icon=icons.CREATE_OUTLINED, tooltip="Editar Tarefa",
+                                   on_click=self.edit_clicked,
+                                   icon_color=colors.GREEN,
+                                   ),
+                        IconButton(icon=icons.DELETE_OUTLINED, tooltip="Excluir Tarefa",
+                                   on_click=self.delete_clicked,
+                                   icon_color=colors.RED,
+                                   ),
+                                   
+                    ],
                     
+                ),
+            ],
+
+        )
+        
+    
+        self.edit_view=Row(
+            visible=False,
+            alignment="spaceBetween",
+            vertical_alignment="center",
+            controls=[
+                IconButton(
+                    icon=icons.DONE_OUTLINE_OUTLINED,
+                    icon_color=colors.GREEN,
+                    tooltip="Atualizar Tarefa",
+                    on_click=self.save_clicked,
                 )
             ]
 
+
         )
+        return Column(controls=[self.display_view,self.display_tasks])
+    
+    def edit_clicked(self,e):
+       self.edit_name.value = self.display_tasks.label
+       self.display_view.visible = False
+       self.edit_view.visible = True
+       self.update()
+
+
+    def delete_clicked(self,e):
+      self.task_delete(self)
+
+    def status_changed(self,e):
+        self.completed = self.display_tasks.value
+        self.task_status_change(self,e)
+
+    def save_clicked(self,e):
+       self.display_tasks.label = self.edit_name.value
+       self.display_view.visible = True
+       self.edit_view.visible = False
+       self.update()
+
 #Classe Principal
 class TodoApp(UserControl):
     def build(self):
@@ -107,7 +159,8 @@ class TodoApp(UserControl):
 
     def tabs_change():
         pass
-
+    def clear_clicked():
+        pass
 
 #funcao principal
 def main(page:Page):
