@@ -27,7 +27,13 @@ class Task(UserControl):
         self.task_name = task_name
         self.task_status_change = task_status_change
         self.task_delete = task_delete
-
+   
+    def build(self):
+        self.display_tasks = Checkbox(
+            value=False, label=self.task_name,
+        
+        )
+        pass
 #Classe Principal
 class TodoApp(UserControl):
     def build(self):
@@ -40,24 +46,45 @@ class TodoApp(UserControl):
         self.filter = Tabs(
            selected_index=0,
            on_change=self.tabs_change,
-           tabs=[Tab(text = "Todas Tarefas"),Tab(text="Tarefas em Andamento"),Tab(text = "Tarefas Cocluidas")]
+           tabs=[Tab(text = "Todas Tarefas"),Tab(text="Tarefas em Andamento"),Tab(text = "Tarefas Cocluidas"),],
 
-        )
+        ),
         return Column(
             width=600,
             controls=[
                 Row([Text(
                     value = "Tarefas", 
-                    style = "headlineMedium"
+                    style = "headlineMedium",
                 )],alignment="center"),
                 Row(
                     controls=[
                         self.new_task,
                         
-                        FloatingActionButton(icon=icons.ADD, on_click=self.add_clicked)
-                    ]
-                )
-            ]),
+                        FloatingActionButton(icon=icons.ADD, on_click=self.add_clicked),
+                    ],
+                ),
+                Column(
+                    spacing=20,
+                    controls=[
+                        self.filter,
+                        self.tasks,
+                        Row(
+                            alignment="spaceBetween",
+                            vertical_alignment = "center",
+                            controls=[
+                                self.itens_left,
+                                OutlinedButton(text="Limpar Tarefas Concuidas".upper(),
+                                               on_click=self.clear_clicked,
+                                               ),
+                            ],
+
+                        ),
+                    ],
+
+                ),
+            ],
+            
+            )
         
 
 
