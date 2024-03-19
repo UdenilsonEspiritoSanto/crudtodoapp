@@ -33,7 +33,18 @@ class Task(UserControl):
             value=False, label=self.task_name,
         
         )
-        pass
+        self.edit_name = TextField(expand=1)
+        self.display_view = Row(
+            alignment="spaceBetween",
+            vertical_alignment="center",
+            controls=[
+                self.display_tasks,
+                Row(
+                    
+                )
+            ]
+
+        )
 #Classe Principal
 class TodoApp(UserControl):
     def build(self):
@@ -58,6 +69,7 @@ class TodoApp(UserControl):
                 )],alignment="center"),
                 Row(
                     controls=[
+                        #input das tarefas
                         self.new_task,
                         
                         FloatingActionButton(icon=icons.ADD, on_click=self.add_clicked),
