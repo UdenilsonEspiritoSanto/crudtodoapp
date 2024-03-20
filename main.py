@@ -31,7 +31,7 @@ class Task(UserControl):
     def build(self):
         self.display_tasks = Checkbox(
             value=False, label=self.task_name,
-            on_change=self.satatus_changed
+            on_change=self.status_changed
         
         )
         self.edit_name = TextField(expand=1)#editar tarefa
@@ -137,7 +137,7 @@ class TodoApp(UserControl):
                             vertical_alignment = "center",
                             controls=[
                                 self.itens_left,
-                                OutlinedButton(text="Limpar Tarefas Concuidas".upper(),
+                                OutlinedButton(text="Limpar Tarefas Concluidas".upper(),
                                                on_click=self.clear_clicked,
                                                ),
                             ],
@@ -154,13 +154,36 @@ class TodoApp(UserControl):
 
 
 
-    def add_clicked(self):
-        pass    
+    def add_clicked(self,e):
+      if self.new_task.value:
+          task=Task(self.new_task.value,self.tasks_status_change,self.task_delete)
+          self.tasks.controls.append(task)
+          self.new_task.value = ""
+          self.new_task.focus()
+          self.update()
 
+    def tasks_status_change(self,task):
+        pass
+    def task_delete(self,task):
+        pass
+    
     def tabs_change():
         pass
     def clear_clicked():
         pass
+    def update(self):
+        status = self.filter.tabs[self.filter.selected.index].text
+        cont = 0
+        for task in self.tasks.controls:
+            task.visible=(
+                status =="Todas Tarefas"
+                or (status == "Tarefas Ativas" and task.completed == False) 
+                or (status == "Tarefas Completas" and task.completed == False)
+
+            )
+            if not task.completed:
+                count+=1
+            self.items_left.value = 'f{count}tarefa(s)adicionadas'    
 
 #funcao principal
 def main(page:Page):
